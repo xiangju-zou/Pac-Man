@@ -2,12 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.han-yaeger</groupId>
-    <artifactId>tutorial</artifactId>
-
-    <version>2024.2025</version>
-
-    <name>Yaeger tutorial: Waterworld</name>
+    <groupId>com.github.xiangju-zou.Pac-Man</groupId>
+    <artifactId>pacman</artifactId>
+    <version>2026</version>
+    <name>Pac-Man game</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -38,7 +36,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.github.hanyaeger.tutorial.Waterworld</mainClass>
+                    <mainClass>com.github.xiangjuzou.pacman.PacMan</mainClass>
                 </configuration>
             </plugin>
         </plugins>

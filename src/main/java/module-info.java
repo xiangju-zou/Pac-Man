@@ -1,7 +1,7 @@
-module waterworld {
+module pacman {
     requires hanyaeger;
 
-    exports com.github.hanyaeger.tutorial;
+    exports com.github.xiangjuzou.pacman;
 
     opens audio;
     opens backgrounds;

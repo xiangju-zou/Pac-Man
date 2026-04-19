@@ -36,7 +36,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.github.xiangjuzou.pacman.PacMan</mainClass>
+                    <mainClass>com.github.xiangjuzou.pacman.PacManGame</mainClass>
                 </configuration>
             </plugin>
         </plugins>

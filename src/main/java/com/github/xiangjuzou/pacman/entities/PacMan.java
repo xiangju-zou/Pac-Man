@@ -5,18 +5,22 @@ import com.github.hanyaeger.api.Size;
 import com.github.hanyaeger.api.YaegerGame;
 import com.github.hanyaeger.api.entities.*;
 import com.github.hanyaeger.api.media.SoundClip;
+import com.github.hanyaeger.api.scenes.DynamicScene;
 import com.github.xiangjuzou.pacman.PacManGame;
+import com.github.xiangjuzou.pacman.scenes.GameLevel;
 import com.github.xiangjuzou.pacman.yaegerExtensions.TravelingSpriteEntity;
 import com.github.xiangjuzou.pacman.entities.animaties.PacManAnimatie;
 
 public class PacMan extends TravelingSpriteEntity implements AnimationCallback{
     private final PacManAnimatie Animaties = new PacManAnimatie(this);
     private final PacManGame game;
+    private final GameLevel scene;
 
-    public PacMan(final Coordinate2D location, PacManGame game){
+    public PacMan(final Coordinate2D location, PacManGame game, GameLevel scene ){
         super("sprites/spritemap.png",location, new Size(64,64), 7,12);
 
         this.game = game;
+        this.scene = scene;
         setAutoCycle(125);
 
        // setAnchorLocation(new Coordinate2D(16,16));
@@ -30,8 +34,10 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback{
 
     @Override
     public void onDistanceReached() {
+        scene.punten.increase();
 
         if(getAnchorLocation().getY() > 144) {
+            scene.leven.setValue(0);
             setSpeed(0);
             var geluidDood = new SoundClip("audio/pacman_death.mp3");
             geluidDood.play();

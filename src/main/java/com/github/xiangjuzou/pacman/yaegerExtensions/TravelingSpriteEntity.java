@@ -33,16 +33,16 @@ public abstract class TravelingSpriteEntity extends DynamicSpriteEntity implemen
         // 1. Bereken afstand sinds de vorige tick
         Coordinate2D currentLayout = getAnchorLocation();
         double distanceMoved = currentLayout.distance(prevLocation);
-        if (distanceMoved == 0.0) {
-            return;
-        }
+//        if (distanceMoved == 0.0) {
+//            return;
+//        }
 
         // 2. Tel op bij de totaal afgelegde afstand
         accumulatedDistance += distanceMoved;
         prevLocation = currentLayout;
 
         // 3. Check of we de 32 pixels gepasseerd zijn
-        if (accumulatedDistance >= getDistanceThreshold()) {
+        if (accumulatedDistance >= getDistanceThreshold() || accumulatedDistance == 0) {
             // 1. Bereken de exacte grid-positie
             double snappedX = Math.round(getAnchorLocation().getX() / 16.0) * 16.0;
             double snappedY = Math.round(getAnchorLocation().getY() / 16.0) * 16.0;
@@ -61,7 +61,6 @@ public abstract class TravelingSpriteEntity extends DynamicSpriteEntity implemen
 
     @Override
     public double getDistanceThreshold () {
-
         return THRESHOLD;
     }
 }

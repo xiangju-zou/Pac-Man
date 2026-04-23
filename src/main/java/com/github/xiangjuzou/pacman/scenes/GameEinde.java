@@ -20,7 +20,7 @@ public class GameEinde extends KeyboardScene {
     public void setupEntities() {
         super.setupEntities();
 
-        var puntenText = new Tekst(new Coordinate2D(getWidth() / 2 -175,  200), "High score");
+        var puntenText = new Tekst(new Coordinate2D(getWidth() / 2 -175, 200), "High score");
         puntenText.setFill(Color.YELLOW);
         addEntity(puntenText);
     }

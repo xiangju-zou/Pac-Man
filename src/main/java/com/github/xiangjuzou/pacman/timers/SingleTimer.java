@@ -6,7 +6,7 @@ public class SingleTimer extends Timer {
     private final TimerCallback callback;
     private final int id;
 
-    public SingleTimer(int id, long intervalInMs, TimerCallback callback){
+    public SingleTimer(int id, long intervalInMs, TimerCallback callback) {
         super(intervalInMs);
 
         this.id = id;

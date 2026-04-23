@@ -16,7 +16,7 @@ public class PacManAnimatie {
 
     private final Map<Soort, Animation> Animations;
 
-    public PacManAnimatie(AnimationCallback callback){
+    public PacManAnimatie(AnimationCallback callback) {
         Animations = Map.of(
                 Soort.DOOD, new FiniteAnimationWithCallBack(0,0,0,11, 125, callback),
                 Soort.STILSTAAN, new LoopingAnimation(1, 0,1,0, 125),

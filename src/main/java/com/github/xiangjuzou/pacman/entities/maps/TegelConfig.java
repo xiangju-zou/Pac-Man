@@ -4,7 +4,7 @@ public class TegelConfig {
     private final int tegelId;
 
     public TegelConfig(int tegelId){
-            this.tegelId = tegelId;
+        this.tegelId = tegelId;
     }
 
     public int getTegelId() {

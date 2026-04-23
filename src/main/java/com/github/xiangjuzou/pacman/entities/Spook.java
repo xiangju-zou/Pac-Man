@@ -7,8 +7,8 @@ import com.github.xiangjuzou.pacman.yaegerExtensions.TravelingSpriteEntity;
 
 public class Spook extends TravelingSpriteEntity {
 
-    public Spook(final String color, final Coordinate2D location){
-        super("sprites/spritemap.png",location, 7,12);
+    public Spook(final String color, final Coordinate2D location) {
+        super("sprites/spritemap.png", location, 7,12);
 
         setAutoCycle(250);
 

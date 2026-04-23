@@ -15,7 +15,7 @@ public class PacManGame extends YaegerGame {
     @Override
     public void setupGame() {
         setGameTitle("Pac-Man");
-        setSize(new Size(56*16*1.5, 62*16));    // 1344 x 992 (speelveld 896 x 992, score veld 448 x 992)
+        setSize(new Size(56*16*1.5, 62*16));  // 1344 x 992 (speelveld 896 x 992, score veld 448 x 992)
     }
 
     @Override

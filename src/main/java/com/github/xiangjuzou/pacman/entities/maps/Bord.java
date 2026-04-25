@@ -4,6 +4,7 @@ import com.github.hanyaeger.api.entities.Direction;
 import com.github.hanyaeger.api.scenes.TileMap;
 
 public class Bord extends TileMap {
+
     //  28 breed, 31 hoog
     private final int[][] map = new int[][]{
             { 4,13,13,13,13,13,13,13,13,13,13,13,13, 1, 2,13,13,13,13,13,13,13,13,13,13,13,13, 5},
@@ -58,6 +59,24 @@ public class Bord extends TileMap {
         }
 
         return true;
+    }
+
+    public Gegeten eetStip(Locatie2D locatie) {
+        var y = locatie.getY();
+        var x = locatie.getX();
+
+        if (getInstanceMap()[y][x] instanceof DotTegel) {
+            getInstanceMap()[y][x].remove();
+
+            return Gegeten.DOT;
+        }
+        if (getInstanceMap()[y][x] instanceof PowerPelletTegel) {
+            getInstanceMap()[y][x].remove();
+
+            return Gegeten.POWERPELLET;
+        }
+
+        return Gegeten.NIETS;
     }
 
     private boolean controleerMuur(Locatie2D locatie, Boolean isSpook) {

@@ -20,6 +20,7 @@ public class PacManAnimatie {
         Animations = Map.of(
                 // Sprite wisselen van het plaatje binnen cycleTime
                 Soort.DOOD, new FiniteAnimationWithCallBack(0,0,0,13, 250, callback),
+                // todo: we kunnen in 4 richtingen stilstaan!
                 Soort.STILSTAAN, new LoopingAnimation(1, 0,1,0, 75),
                 Soort.RECHTS, new LoopingAnimation(1, 0, 1, 1, 75),
                 Soort.LINKS, new LoopingAnimation(1,2, 1,3,75),

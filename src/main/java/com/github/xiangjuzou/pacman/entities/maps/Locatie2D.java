@@ -6,6 +6,8 @@ public class Locatie2D {
     private final int x;
     private final int y;
 
+    private final int tileSize = 32;
+
     public int getX() {
         return x;
     }
@@ -20,11 +22,11 @@ public class Locatie2D {
     }
 
     public Locatie2D(Coordinate2D coordinate) {
-        this.x = (int)(coordinate.getX() / 16);
-        this.y = (int)(coordinate.getY() /16);
+        this.x = (int)(coordinate.getX() / tileSize);
+        this.y = (int)(coordinate.getY() / tileSize);
     }
 
     public Coordinate2D GetCoordinate() {
-        return new Coordinate2D(x*16, y*16);
+        return new Coordinate2D(x*tileSize, y*tileSize);
     }
 }

@@ -15,8 +15,7 @@ public class SingleTimer extends Timer {
 
     @Override
     public void onAnimationUpdate(long timestamp) {
-        System.out.println(("TIJD voor " + id));
         callback.onTimeReached(id);
-        remove();
+        pause();
     }
 }

@@ -33,9 +33,9 @@ public abstract class TravelingSpriteEntity extends DynamicSpriteEntity implemen
         // 1. Bereken afstand sinds de vorige tick
         Coordinate2D currentLayout = getAnchorLocation();
         double distanceMoved = currentLayout.distance(prevLocation);
-//        if (distanceMoved == 0.0) {
-//            return;
-//        }
+       //  if (distanceMoved == 0.0) {
+       //    return;
+       //  }
 
         // 2. Tel op bij de totaal afgelegde afstand
         accumulatedDistance += distanceMoved;

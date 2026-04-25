@@ -2,18 +2,14 @@ package com.github.xiangjuzou.pacman.entities;
 
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.Size;
-import com.github.hanyaeger.api.YaegerGame;
 import com.github.hanyaeger.api.entities.*;
 import com.github.hanyaeger.api.media.SoundClip;
-import com.github.hanyaeger.api.scenes.DynamicScene;
 import com.github.hanyaeger.api.userinput.KeyListener;
-import com.github.xiangjuzou.pacman.PacManGame;
 import com.github.xiangjuzou.pacman.entities.maps.Bord;
 import com.github.xiangjuzou.pacman.entities.maps.Locatie2D;
 import com.github.xiangjuzou.pacman.scenes.GameLevel;
 import com.github.xiangjuzou.pacman.yaegerExtensions.TravelingSpriteEntity;
 import com.github.xiangjuzou.pacman.entities.animaties.PacManAnimatie;
-import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 
 import java.util.Set;
@@ -22,20 +18,27 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
     private final PacManAnimatie Animaties = new PacManAnimatie(this);
     private final GameLevel scene;
     private KeyCode LaatsteCommando = null;
+    private boolean isBegonnen = false;
+    private Bord bord;
+    private int snelheid;
 
     public PacMan(final Coordinate2D location, GameLevel scene ) {
-        super("sprites/spritemap.png",location, new Size(64,64), 7,12);
+        super("sprites/spritemap.png", location, new Size(64,64), 7,14);
 
         this.scene = scene;
+        snelheid = 3;
 
         setAutoCycle(125);
-       // setAnchorLocation(new Coordinate2D(16,16));
         playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.STILSTAAN));
     }
 
     public void start() {
+        isBegonnen = true;
+
+        bord = (Bord)scene.getTileMaps().get(0);
+
         playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.RECHTS), true);
-        setMotion(2, Direction.RIGHT);
+        setMotion(snelheid, Direction.RIGHT);
     }
 
     @Override
@@ -46,50 +49,61 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
         }
     }
 
+    // Deze callback gaat af bij elke 32 pixels (2 stappen op de kaart) en als je stil staat
     @Override
     public void onDistanceReached() {
-        scene.punten.increase();
+        if (!isBegonnen) {
+            return;
+        }
+        var pacmanTileCoordinate = getAnchorLocation().add(new Coordinate2D(16,16));
+        var locatie = new Locatie2D(pacmanTileCoordinate);
+
+        // Eet stip
+        var y = locatie.getY();
+        var x = locatie.getX();
+        if (bord.getInstanceMap()[y][x] != null) {
+            bord.getInstanceMap()[y][x].remove();
+            scene.punten.increase();
+        }
 
         // controleer muur
-        var bord = (Bord)scene.getTileMaps().get(0);
-        var huidigeLocatie = new Locatie2D(getAnchorLocation());
-        //System.out.println(huidigeLocatie.getX() + "," + huidigeLocatie.getY() + " == " + getAnchorLocation().toString());
-        var heeftMuur = bord.heeftMuur(huidigeLocatie, Direction.valueOf(getDirection()));
+        var heeftMuur = bord.heeftMuur(locatie, Direction.valueOf(getDirection()), false);
         if (heeftMuur) {
+            playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.STILSTAAN));
             setSpeed(0);
         }
 
         if (LaatsteCommando != null) {
             switch (LaatsteCommando) {
                 case UP -> {
-                    if (!bord.heeftMuur(huidigeLocatie, Direction.UP)) {
+                    if (!bord.heeftMuur(locatie, Direction.UP, false)) {
                         playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.BOVEN), true);
                         setDirection((Direction.UP));
-                        setSpeed(2);
+                        setSpeed(snelheid);
                         LaatsteCommando = null;
                     }
                 }
                 case DOWN -> {
-                    if (!bord.heeftMuur(huidigeLocatie, Direction.DOWN)) {
+                    if (!bord.heeftMuur(locatie, Direction.DOWN, false)) {
                         playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.BENEDEN), true);
                         setDirection((Direction.DOWN));
-                        setSpeed(2);
+                        setSpeed(snelheid);
                         LaatsteCommando = null;
                     }
                 }
                 case RIGHT -> {
-                    if (!bord.heeftMuur(huidigeLocatie, Direction.RIGHT)) {
+                    if (!bord.heeftMuur(locatie, Direction.RIGHT, false)) {
                         playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.RECHTS), true);
                         setDirection((Direction.RIGHT));
-                        setSpeed(2);
+                        setSpeed(snelheid);
                         LaatsteCommando = null;
                     }
                 }
                 case LEFT -> {
-                    if (!bord.heeftMuur(huidigeLocatie, Direction.LEFT)) {
+                    if (!bord.heeftMuur(locatie, Direction.LEFT, false)) {
                         playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.LINKS), true);
                         setDirection((Direction.LEFT));
-                        setSpeed(2);
+                        setSpeed(snelheid);
                         LaatsteCommando = null;
                     }
                 }
@@ -103,15 +117,7 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
             var geluidDood = new SoundClip("audio/pacman_death.mp3");
             geluidDood.play();
             playAnimation((Animaties.getAnimatie(PacManAnimatie.Soort.DOOD)));
-            return;
         }
-
-//        if (getAnchorLocation().getX() == 16+64+64+32) {
-//            setDirection(Direction.DOWN);
-//            var animatieBeneden = new LoopingAnimation(1,6,1,7,250);
-//            playAnimation(animatieBeneden);
-//        }
-     //   System.out.println("LOC:" + this.getAnchorLocation().toString());
     }
 
     @Override

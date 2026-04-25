@@ -5,13 +5,10 @@ import com.github.hanyaeger.api.media.SoundClip;
 import com.github.hanyaeger.api.scenes.DynamicScene;
 import com.github.hanyaeger.api.scenes.TileMapContainer;
 import com.github.xiangjuzou.pacman.PacManGame;
-import com.github.xiangjuzou.pacman.entities.Plaatje;
-import com.github.xiangjuzou.pacman.entities.Tekst;
-import com.github.xiangjuzou.pacman.entities.ValueEntity;
+import com.github.xiangjuzou.pacman.entities.*;
 import com.github.xiangjuzou.pacman.timers.SingleTimer;
 import com.github.xiangjuzou.pacman.timers.TimerCallback;
 import com.github.xiangjuzou.pacman.entities.maps.Bord;
-import com.github.xiangjuzou.pacman.entities.PacMan;
 import javafx.scene.paint.Color;
 
 
@@ -19,9 +16,9 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
     public ValueEntity punten;
     public ValueEntity hogePunten;
     public ValueEntity leven;
-
     private final PacManGame pacManGame;
     private PacMan pacMan;
+
 
     public GameLevel(PacManGame pacManGame) {
         this.pacManGame = pacManGame;
@@ -44,12 +41,12 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
         hogePunten = new ValueEntity(new Coordinate2D(925, getHeight() - 700), "Hoogste", 0);
 
         addEntity(pacMan);
-
         addEntity(leven);
         addEntity(punten);
         addEntity(hogePunten);
     }
 
+    // TileMap registreren
     @Override
     public void setupTileMaps() {
         addTileMap(new Bord());
@@ -57,26 +54,37 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
 
     @Override
     public double getWidth() {
-        return 56*16;
+        return 28*32; // TileMap wordt niet de gehele scherm
     }
 
     @Override
     public double getHeight() {
-        return 62*16;
+        return 31*32; //TileMap wordt niet de gehele scherm
     }
 
     @Override
     public void setupTimers() {
-        SingleTimer singleTimer = new SingleTimer(0, 5000, this);
-        addTimer(singleTimer);
+        // Het liedje wordt eerst afgespeeld en duurt 5 seconden
+        SingleTimer startTimer = new SingleTimer(0, 5000, this);
+        addTimer(startTimer);
+
+        SingleTimer doodTimer = new SingleTimer(1, 2000, this);
+        doodTimer.pause();
+        addTimer(doodTimer);
     }
 
     @Override
     public void onTimeReached(int id) {
-        pacMan.start();
+        if (id == 0 ) {
+            pacMan.start();
+        }
+
+        if (id == 1) {
+            pacManGame.setActiveScene(2);
+        }
     }
 
     public void gameOver(){
-        pacManGame.setActiveScene(2);
+        this.getTimers().get(1).resume();
     }
 }

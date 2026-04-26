@@ -8,6 +8,7 @@ public class DotTegel extends SpriteEntity {
 
     public DotTegel(Coordinate2D location, Size size) {
         super("sprites/dotmap.png", location, size, 1, 3);
+
         setCurrentFrameIndex(2);
     }
 }

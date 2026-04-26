@@ -11,7 +11,6 @@ public class Spook extends TravelingSpriteEntity {
         super("sprites/spritemap.png", location, 7,12);
 
         setAutoCycle(250);
-
         var animation = new LoopingAnimation(4,0, 4, 1, 250); // <- getallen kloppen niet!
         this.playAnimation(animation);
     }

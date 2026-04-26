@@ -5,7 +5,6 @@ import com.github.hanyaeger.api.Coordinate2D;
 public class Locatie2D {
     private final int x;
     private final int y;
-
     private final int tileSize = 32;
 
     public int getX() {

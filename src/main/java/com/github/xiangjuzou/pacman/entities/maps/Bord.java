@@ -4,9 +4,8 @@ import com.github.hanyaeger.api.entities.Direction;
 import com.github.hanyaeger.api.scenes.TileMap;
 
 public class Bord extends TileMap {
-
     //  28 breed, 31 hoog
-    private final int[][] map = new int[][]{
+    private final int[][] map = new int[][] {
             { 4,13,13,13,13,13,13,13,13,13,13,13,13, 1, 2,13,13,13,13,13,13,13,13,13,13,13,13, 5},
             {16,39,39,39,39,39,39,39,39,39,39,39,39,33,32,39,39,39,39,39,39,39,39,39,39,39,39,17},
             {16,39,22,28,28,23,39,22,28,28,28,23,39,33,32,39,22,28,28,28,23,39,22,28,28,23,39,17},
@@ -41,7 +40,7 @@ public class Bord extends TileMap {
     };
 
     public boolean heeftMuur(Locatie2D locatie, Direction richting, Boolean isSpook) {
-        // controleert of een tile een muur naast zich heeft in de opgegeven richting
+        // Controleert of een tile een muur naast zich heeft in de opgegeven richting
 
         switch (richting) {
             case Direction.DOWN -> {
@@ -82,6 +81,7 @@ public class Bord extends TileMap {
     private boolean controleerMuur(Locatie2D locatie, Boolean isSpook) {
         int tileId = map[locatie.getY()][locatie.getX()];
 
+        // TitleId 0 is zwarte tegel, 37 is PowerPelletTegel, 39 is DotTegel
         if (tileId == 0 || tileId == 37 || tileId == 39) {
             return false;
         }

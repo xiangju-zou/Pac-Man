@@ -2,17 +2,19 @@ package com.github.xiangjuzou.pacman.entities;
 
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.Size;
-import com.github.hanyaeger.api.entities.*;
+import com.github.hanyaeger.api.entities.AnimationCallback;
+import com.github.hanyaeger.api.entities.Direction;
 import com.github.hanyaeger.api.media.SoundClip;
 import com.github.hanyaeger.api.userinput.KeyListener;
-import com.github.xiangjuzou.pacman.yaegerExtensions.MonoPhoneSoundClip;
+import com.github.xiangjuzou.pacman.entities.animaties.PacManAnimatie;
+import com.github.xiangjuzou.pacman.entities.animaties.PacManAnimatieSoort;
 import com.github.xiangjuzou.pacman.entities.maps.Bord;
 import com.github.xiangjuzou.pacman.entities.maps.Gegeten;
 import com.github.xiangjuzou.pacman.entities.maps.Locatie2D;
 import com.github.xiangjuzou.pacman.scenes.GameEvents;
 import com.github.xiangjuzou.pacman.scenes.GameLevel;
+import com.github.xiangjuzou.pacman.yaegerExtensions.MonoPhoneSoundClip;
 import com.github.xiangjuzou.pacman.yaegerExtensions.TravelingSpriteEntity;
-import com.github.xiangjuzou.pacman.entities.animaties.PacManAnimatie;
 import javafx.scene.input.KeyCode;
 
 import java.util.Set;
@@ -27,22 +29,19 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
     private boolean isBegonnen = false;
     private Bord bord;
 
-    public PacMan(final Coordinate2D location, GameLevel scene, int snelheid ) {
-        super("sprites/spritemap.png", location, new Size(64,64), 7,14);
+    public PacMan(final Coordinate2D location, GameLevel scene, int snelheid) {
+        super("sprites/spritemap.png", location, new Size(64, 64), 7, 14);
 
         this.scene = scene;
         this.snelheid = snelheid;
-
         setAutoCycle(125);
-        playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.STILSTAAN));
+        playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.STILSTAAN));
     }
 
     public void start() {
         isBegonnen = true;
-
         bord = (Bord)scene.getTileMaps().get(0);
-
-        playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.RECHTS), true);
+        playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.RECHTS), true);
         setMotion(snelheid, Direction.RIGHT);
     }
 
@@ -80,7 +79,7 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
         // controleer muur
         var heeftMuur = bord.heeftMuur(locatie, Direction.valueOf(getDirection()), false);
         if (heeftMuur) {
-            playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.STILSTAAN));
+            playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.STILSTAAN));
             setSpeed(0);
         }
 
@@ -88,7 +87,7 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
             switch (LaatsteCommando) {
                 case UP -> {
                     if (!bord.heeftMuur(locatie, Direction.UP, false)) {
-                        playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.BOVEN), true);
+                        playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.BOVEN), true);
                         setDirection((Direction.UP));
                         setSpeed(snelheid);
                         LaatsteCommando = null;
@@ -96,7 +95,7 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
                 }
                 case DOWN -> {
                     if (!bord.heeftMuur(locatie, Direction.DOWN, false)) {
-                        playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.BENEDEN), true);
+                        playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.BENEDEN), true);
                         setDirection((Direction.DOWN));
                         setSpeed(snelheid);
                         LaatsteCommando = null;
@@ -104,7 +103,7 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
                 }
                 case RIGHT -> {
                     if (!bord.heeftMuur(locatie, Direction.RIGHT, false)) {
-                        playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.RECHTS), true);
+                        playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.RECHTS), true);
                         setDirection((Direction.RIGHT));
                         setSpeed(snelheid);
                         LaatsteCommando = null;
@@ -112,7 +111,7 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
                 }
                 case LEFT -> {
                     if (!bord.heeftMuur(locatie, Direction.LEFT, false)) {
-                        playAnimation(Animaties.getAnimatie(PacManAnimatie.Soort.LINKS), true);
+                        playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.LINKS), true);
                         setDirection((Direction.LEFT));
                         setSpeed(snelheid);
                         LaatsteCommando = null;
@@ -129,14 +128,14 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
 
     @Override
     public void call() {
-       // Dit is de callback van de "gaDood"  animatie.
-       //todo: op startpunt opnieuw beginnen.
+        // Dit is de callback van de "gaDood"  animatie.
+        //todo: op startpunt opnieuw beginnen.
     }
 
     public void gaDood() {
         setSpeed(0);
         var geluidDood = new SoundClip("audio/pacman_death.mp3");
         geluidDood.play();
-        playAnimation((Animaties.getAnimatie(PacManAnimatie.Soort.DOOD)));
+        playAnimation((Animaties.getAnimatie(PacManAnimatieSoort.DOOD)));
     }
 }

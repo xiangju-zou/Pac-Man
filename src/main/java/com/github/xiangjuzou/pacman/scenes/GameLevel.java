@@ -1,14 +1,15 @@
 package com.github.xiangjuzou.pacman.scenes;
+
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.TimerContainer;
-import com.github.hanyaeger.api.media.SoundClip;
 import com.github.hanyaeger.api.scenes.DynamicScene;
 import com.github.hanyaeger.api.scenes.TileMapContainer;
 import com.github.xiangjuzou.pacman.PacManGame;
-import com.github.xiangjuzou.pacman.entities.*;
+import com.github.xiangjuzou.pacman.entities.PacMan;
+import com.github.xiangjuzou.pacman.entities.ValueEntity;
+import com.github.xiangjuzou.pacman.entities.maps.Bord;
 import com.github.xiangjuzou.pacman.timers.SingleTimer;
 import com.github.xiangjuzou.pacman.timers.TimerCallback;
-import com.github.xiangjuzou.pacman.entities.maps.Bord;
 import com.github.xiangjuzou.pacman.yaegerExtensions.MonoPhoneSoundClip;
 import javafx.scene.paint.Color;
 
@@ -16,6 +17,7 @@ import javafx.scene.paint.Color;
 public class GameLevel extends DynamicScene implements TileMapContainer, TimerContainer, TimerCallback {
     private final PacManGame pacManGame;
     private final MonoPhoneSoundClip startSound = new MonoPhoneSoundClip("audio/pacman_beginning.mp3");
+    private final int totaalAantalStippen = 244;  // inclusief 4 powerpellets
 
     public ValueEntity punten;
     public ValueEntity hogePunten;
@@ -25,7 +27,6 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
     private int aantalDotsGegeten;
     private SpookStatus spookStatus;
     private int aantalDodeSpoken;
-
 
     public GameLevel(PacManGame pacManGame) {
         this.pacManGame = pacManGame;
@@ -119,7 +120,7 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
             }
             case SPOOKINHUIS -> {
                 aantalDodeSpoken--;
-                if (aantalDodeSpoken ==0) {
+                if (aantalDodeSpoken == 0) {
                     spookStatus = SpookStatus.VLUCHTEN;
                 }
             }

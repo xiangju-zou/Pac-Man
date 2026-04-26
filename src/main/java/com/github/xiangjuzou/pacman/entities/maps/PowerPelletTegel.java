@@ -12,6 +12,7 @@ public class PowerPelletTegel extends DynamicSpriteEntity {
         super("sprites/dotmap.png", location, size, 1, 3);
 
         setAutoCycle(500);
+
         var knipperen = new LoopingAnimation(0, 0, 0, 1, 500);
         playAnimation(knipperen);
     }

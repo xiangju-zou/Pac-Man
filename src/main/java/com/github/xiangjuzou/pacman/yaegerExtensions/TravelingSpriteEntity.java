@@ -2,7 +2,9 @@ package com.github.xiangjuzou.pacman.yaegerExtensions;
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.Size;
 import com.github.hanyaeger.api.UpdateExposer;
+import com.github.hanyaeger.api.entities.Direction;
 import com.github.hanyaeger.api.entities.impl.DynamicSpriteEntity;
+import com.github.xiangjuzou.pacman.entities.maps.Locatie2D;
 
 public abstract class TravelingSpriteEntity extends DynamicSpriteEntity implements DistanceWatcher, UpdateExposer {
     private double accumulatedDistance = 0;
@@ -62,5 +64,26 @@ public abstract class TravelingSpriteEntity extends DynamicSpriteEntity implemen
     @Override
     public double getDistanceThreshold () {
         return THRESHOLD;
+    }
+
+    @Override
+    public void onDistanceReached() {
+        var TileCoordinate = getAnchorLocation().add(new Coordinate2D(16, 16));
+        var locatie = new Locatie2D(TileCoordinate);
+
+        var characterOffset = new Coordinate2D(-16,-16);
+
+        // sta ik aan het eind van de rechter tunnel, en ga ik naar rechts, ga dan naar het eind linker tunnel.
+        if (locatie.getX() == 27 && locatie.getY() == 14 && getDirection() == Direction.RIGHT.getValue()) {
+            var spawnLeft = new Locatie2D(0,14);
+            setAnchorLocation(spawnLeft.GetCoordinate().add(characterOffset));
+        }
+
+        // sta ik aan het eind van de linker tunnel, en ga ik naar links, ga dan naar het eind van de rechter tunnel.
+        if (locatie.getX() == 0 && locatie.getY() == 14 && getDirection() == Direction.LEFT.getValue()) {
+            var spawnLeft = new Locatie2D(27,14);
+            setAnchorLocation(spawnLeft.GetCoordinate().add(characterOffset));
+        }
+
     }
 }

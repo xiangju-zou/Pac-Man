@@ -56,6 +56,8 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
     // Deze callback gaat af bij elke 32 pixels (2 stappen op de kaart) en als je stil staat
     @Override
     public void onDistanceReached() {
+        super.onDistanceReached();
+
         if (!isBegonnen) {
             return;
         }

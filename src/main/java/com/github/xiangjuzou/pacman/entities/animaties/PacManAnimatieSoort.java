@@ -2,7 +2,10 @@ package com.github.xiangjuzou.pacman.entities.animaties;
 
 public enum PacManAnimatieSoort {
     DOOD,
-    STILSTAAN,
+    STILSTAANRECHTS,
+    STILSTAANLINKS,
+    STILSTAANBOVEN,
+    STILSTAANBENEDEN,
     RECHTS,
     LINKS,
     BOVEN,

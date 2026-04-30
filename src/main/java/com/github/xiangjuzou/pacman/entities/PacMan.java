@@ -28,6 +28,7 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
     private KeyCode LaatsteCommando = null;
     private boolean isBegonnen = false;
     private Bord bord;
+    public static Coordinate2D startLocatie = new Coordinate2D(13*32-16, 23*32-16);
 
     public PacMan(final Coordinate2D location, GameLevel scene, int snelheid) {
         super("sprites/spritemap.png", location, new Size(64, 64), 7, 14);
@@ -35,14 +36,16 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
         this.scene = scene;
         this.snelheid = snelheid;
         setAutoCycle(125);
-        playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.STILSTAAN));
+        playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.STILSTAANLINKS));
     }
 
     public void start() {
         isBegonnen = true;
+
+        setAnchorLocation(PacMan.startLocatie);
         bord = (Bord)scene.getTileMaps().get(0);
-        playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.RECHTS), true);
-        setMotion(snelheid, Direction.RIGHT);
+        playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.LINKS), true);
+        setMotion(snelheid, Direction.LEFT);
     }
 
     @Override
@@ -81,7 +84,12 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
         // controleer muur
         var heeftMuur = bord.heeftMuur(locatie, Direction.valueOf(getDirection()), false);
         if (heeftMuur) {
-            playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.STILSTAAN));
+            switch (Direction.valueOf(getDirection())) {
+                case Direction.LEFT -> playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.STILSTAANLINKS));
+                case Direction.RIGHT -> playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.STILSTAANRECHTS));
+                case Direction.DOWN -> playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.STILSTAANBENEDEN));
+                case Direction.UP -> playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.STILSTAANBOVEN));
+            }
             setSpeed(0);
         }
 

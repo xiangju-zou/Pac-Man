@@ -43,7 +43,7 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
     @Override
     public void setupEntities() {
         //addEntity(new Ghost("pink", new Coordinate2D(30,18)));
-        this.pacMan = new PacMan(new Coordinate2D(16,16), this, 3);
+        this.pacMan = new PacMan(PacMan.startLocatie, this, 3);
 
         leven = new ValueEntity(new Coordinate2D(925, getHeight() - 900), "Levens", 3);
         punten = new ValueEntity(new Coordinate2D(925, getHeight() - 800), "Punten", 0);

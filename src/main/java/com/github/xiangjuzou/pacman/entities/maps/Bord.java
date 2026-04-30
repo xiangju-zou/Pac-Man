@@ -4,6 +4,11 @@ import com.github.hanyaeger.api.entities.Direction;
 import com.github.hanyaeger.api.scenes.TileMap;
 
 public class Bord extends TileMap {
+    private static final int LEEG = 0;
+    private static final int POWERPELLET = 37;
+    private static final int DOT = 39;
+    private static final int SPOOKDEUR = 3;
+
     //  28 breed, 31 hoog
     private final int[][] map = new int[][] {
             { 4,13,13,13,13,13,13,13,13,13,13,13,13, 1, 2,13,13,13,13,13,13,13,13,13,13,13,13, 5},
@@ -75,18 +80,19 @@ public class Bord extends TileMap {
             return Gegeten.POWERPELLET;
         }
 
-        return Gegeten.NIETS;
+        return Gegeten.NIETS; // Muur of leeg
     }
 
     private boolean controleerMuur(Locatie2D locatie, Boolean isSpook) {
         int tileId = map[locatie.getY()][locatie.getX()];
 
-        // TitleId 0 is zwarte tegel, 37 is PowerPelletTegel, 39 is DotTegel
-        if (tileId == 0 || tileId == 37 || tileId == 39) {
+        // TitleId 0 is zwarte(lege) tegel, 37 is PowerPelletTegel, 39 is DotTegel. Alles waar Pac-Man/spook overheen kan
+        if (tileId == LEEG || tileId == DOT || tileId == POWERPELLET) {
             return false;
         }
 
-        if (tileId == 3 && isSpook) {
+        // Spook mag door deur
+        if (tileId == SPOOKDEUR && isSpook) {
             return false;
         }
 

@@ -98,7 +98,7 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
     }
 
     // todo: door te tunnel lopen met pacman en spook (spook gaat langzamer door de tunnel)  [would have?]
-    public void processEvent(GameEvents event){
+    public void processEvent(GameEvents event) {
         switch (event) {
             case DOTGEGETEN -> {
                 punten.increase();

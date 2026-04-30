@@ -22,7 +22,7 @@ import java.util.Set;
 public class PacMan extends TravelingSpriteEntity implements AnimationCallback, KeyListener {
     private final PacManAnimatie Animaties = new PacManAnimatie(this);
     private final GameLevel scene;
-    private final int snelheid;
+    private final double snelheid;
     private final MonoPhoneSoundClip chomp = new MonoPhoneSoundClip("audio/pacman_chomp.wav", SoundClip.INDEFINITE);
 
     private KeyCode LaatsteCommando = null;
@@ -30,7 +30,7 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
     private Bord bord;
     public static Coordinate2D startLocatie = new Coordinate2D(13*32-16, 23*32-16);
 
-    public PacMan(final Coordinate2D location, GameLevel scene, int snelheid) {
+    public PacMan(final Coordinate2D location, GameLevel scene, double snelheid) {
         super("sprites/spritemap.png", location, new Size(64, 64), 7, 14);
 
         this.scene = scene;
@@ -142,8 +142,13 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
         //todo: op startpunt opnieuw beginnen.
     }
 
+    public void nextLevel(){
+        chomp.stop();
+    }
+
     public void gaDood() {
         setSpeed(0);
+        chomp.stop();
         var geluidDood = new SoundClip("audio/pacman_death.mp3");
         geluidDood.play();
         playAnimation((Animaties.getAnimatie(PacManAnimatieSoort.DOOD)));

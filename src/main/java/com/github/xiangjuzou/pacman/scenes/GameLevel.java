@@ -1,11 +1,12 @@
 package com.github.xiangjuzou.pacman.scenes;
-
+import com.github.xiangjuzou.pacman.entities.Spook;
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.TimerContainer;
 import com.github.hanyaeger.api.scenes.DynamicScene;
 import com.github.hanyaeger.api.scenes.TileMapContainer;
 import com.github.xiangjuzou.pacman.PacManGame;
 import com.github.xiangjuzou.pacman.entities.PacMan;
+import com.github.xiangjuzou.pacman.entities.Spook;
 import com.github.xiangjuzou.pacman.entities.ValueEntity;
 import com.github.xiangjuzou.pacman.entities.maps.Bord;
 import com.github.xiangjuzou.pacman.timers.SingleTimer;
@@ -27,6 +28,7 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
     private int aantalDotsGegeten;
     private SpookStatus spookStatus;
     private int aantalDodeSpoken;
+    private Spook spook;
 
     public GameLevel(PacManGame pacManGame) {
         this.pacManGame = pacManGame;
@@ -50,6 +52,8 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
         hogePunten = new ValueEntity(new Coordinate2D(925, getHeight() - 700), "Hoogste", 0);
 
         addEntity(pacMan);
+        spook = new Spook("pink", new Coordinate2D(13*32, 11*32));
+        addEntity(spook);
         addEntity(leven);
         addEntity(punten);
         addEntity(hogePunten);
@@ -86,6 +90,8 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
     public void onTimeReached(int id) {
         if (id == 0 ) {
             pacMan.start();
+            var bord = (Bord) getTileMaps().get(0);
+            spook.start(bord);
         }
 
         if (id == 1) {

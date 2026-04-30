@@ -52,7 +52,7 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
         hogePunten = new ValueEntity(new Coordinate2D(925, getHeight() - 700), "Hoogste", 0);
 
         addEntity(pacMan);
-        spook = new Spook("pink", new Coordinate2D(13*32, 11*32));
+        spook = new Spook("pink", new Coordinate2D(12*32+16, 12*32+16));
         addEntity(spook);
         addEntity(leven);
         addEntity(punten);

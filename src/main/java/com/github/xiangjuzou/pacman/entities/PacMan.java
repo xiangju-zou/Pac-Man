@@ -3,6 +3,8 @@ package com.github.xiangjuzou.pacman.entities;
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.Size;
 import com.github.hanyaeger.api.entities.AnimationCallback;
+import com.github.hanyaeger.api.entities.Collided;
+import com.github.hanyaeger.api.entities.Collider;
 import com.github.hanyaeger.api.entities.Direction;
 import com.github.hanyaeger.api.media.SoundClip;
 import com.github.hanyaeger.api.userinput.KeyListener;
@@ -17,9 +19,10 @@ import com.github.xiangjuzou.pacman.yaegerExtensions.MonoPhoneSoundClip;
 import com.github.xiangjuzou.pacman.yaegerExtensions.TravelingSpriteEntity;
 import javafx.scene.input.KeyCode;
 
+import java.util.List;
 import java.util.Set;
 
-public class PacMan extends TravelingSpriteEntity implements AnimationCallback, KeyListener {
+public class PacMan extends TravelingSpriteEntity implements AnimationCallback, KeyListener, Collided {
     private final PacManAnimatie Animaties = new PacManAnimatie(this);
     private final GameLevel scene;
     private final int snelheid;
@@ -137,5 +140,14 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
         var geluidDood = new SoundClip("audio/pacman_death.mp3");
         geluidDood.play();
         playAnimation((Animaties.getAnimatie(PacManAnimatieSoort.DOOD)));
+    }
+
+    @Override
+    public void onCollision(List<Collider> collidingObjects) {
+        for (Collider collider : collidingObjects) {
+            if (collider instanceof Spook) {
+                scene.processEvent(GameEvents.PACMANGEPAKT);
+            }
+        }
     }
 }

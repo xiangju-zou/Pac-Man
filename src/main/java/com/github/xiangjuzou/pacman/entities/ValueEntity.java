@@ -5,6 +5,7 @@ import com.github.hanyaeger.api.entities.impl.CustomFont;
 import com.github.hanyaeger.api.entities.impl.TextEntity;
 import javafx.scene.paint.Color;
 
+// Laat het puntenaantal zien
 public class ValueEntity extends TextEntity {
     private final String description;
     private int value;
@@ -28,7 +29,6 @@ public class ValueEntity extends TextEntity {
         value = newValue;
         updateText();
     }
-
 
     public void increase() {
         value++;

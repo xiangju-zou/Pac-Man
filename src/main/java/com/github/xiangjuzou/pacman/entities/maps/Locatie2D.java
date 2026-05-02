@@ -21,7 +21,7 @@ public class Locatie2D {
     }
 
     public Locatie2D(Coordinate2D coordinate) {
-        this.x = (int)(coordinate.getX() / tileSize);
+        this.x = (int)(coordinate.getX() / tileSize); // Het verwijst naar onze positie op de kaart
         this.y = (int)(coordinate.getY() / tileSize);
     }
 

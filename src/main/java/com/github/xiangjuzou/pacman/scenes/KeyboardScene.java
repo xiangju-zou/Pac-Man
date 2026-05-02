@@ -13,6 +13,7 @@ import javafx.scene.input.KeyCode;
 
 import java.util.Set;
 
+// Spatiebalk op het toetsenbord
 public abstract class KeyboardScene extends DynamicScene implements KeyListener, TimerContainer, TimerCallback {
     private final PacManGame pacManGame;
     private final int sceneId;

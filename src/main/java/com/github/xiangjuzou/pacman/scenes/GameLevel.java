@@ -6,14 +6,14 @@ import com.github.hanyaeger.api.media.SoundClip;
 import com.github.hanyaeger.api.scenes.DynamicScene;
 import com.github.hanyaeger.api.scenes.TileMapContainer;
 import com.github.xiangjuzou.pacman.PacManGame;
+import com.github.xiangjuzou.pacman.entities.Fruit;
 import com.github.xiangjuzou.pacman.entities.PacMan;
 import com.github.xiangjuzou.pacman.entities.ValueEntity;
 import com.github.xiangjuzou.pacman.entities.maps.Bord;
+import com.github.xiangjuzou.pacman.timers.DelayedTimer;
 import com.github.xiangjuzou.pacman.timers.SingleTimer;
 import com.github.xiangjuzou.pacman.timers.TimerCallback;
-import com.github.xiangjuzou.pacman.yaegerExtensions.MonoPhoneSoundClip;
 import javafx.scene.paint.Color;
-
 
 public class GameLevel extends DynamicScene implements TileMapContainer, TimerContainer, TimerCallback {
     private final PacManGame pacManGame;
@@ -23,6 +23,7 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
     public ValueEntity punten;
     public ValueEntity hogePunten;
     public ValueEntity leven;
+    private Fruit fruit;
 
     private PacMan pacMan;
     private int aantalDotsGegeten;
@@ -41,18 +42,19 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
         setBackgroundColor(Color.BLACK);
         startSound.play();
         level = pacManGame.getLevel();
-        System.out.println(("level: " + level));
     }
 
     @Override
     public void setupEntities() {
-        //addEntity(new Ghost("pink", new Coordinate2D(30,18)));
-        this.pacMan = new PacMan(PacMan.startLocatie, this, 3+level*0.5);
-
+        //addEntity(new Spook("pink", new Coordinate2D(30,18)));
+        pacMan = new PacMan(PacMan.startLocatie, this, 3+level*0.5);
         leven = new ValueEntity(new Coordinate2D(925, getHeight() - 900), "Levens", 3);
         punten = new ValueEntity(new Coordinate2D(925, getHeight() - 800), "Punten", pacManGame.getPunten());
         hogePunten = new ValueEntity(new Coordinate2D(925, getHeight() - 700), "Hoogste", 0);
+        fruit = new Fruit(new Coordinate2D(13*32-16, 17*32-16), level);
+        fruit.setVisible(false);
 
+        addEntity(fruit);
         addEntity(pacMan);
         addEntity(leven);
         addEntity(punten);
@@ -78,15 +80,13 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
     @Override
     public void setupTimers() {
         // Het liedje wordt eerst afgespeeld en duurt 5 seconden
-        SingleTimer startTimer = new SingleTimer(0, 5000, this);
+        var startTimer = new SingleTimer(0, 5000, this);
         addTimer(startTimer);
 
-        SingleTimer doodTimer = new SingleTimer(1, 6000, this);
-        doodTimer.pause();
+        var doodTimer = new DelayedTimer(1, 6000, this);
         addTimer(doodTimer);
 
-        SingleTimer fruitTimer = new SingleTimer(2, 10000, this);
-        fruitTimer.pause();
+        var fruitTimer = new DelayedTimer(2, 10000, this);
         addTimer(fruitTimer);
     }
 
@@ -101,7 +101,7 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
         }
 
         if (id == 2) {
-            hideFruit();
+            fruit.setVisible(false);
         }
     }
 
@@ -110,39 +110,26 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
         pacManGame.resetLevel();
     }
 
-    public void showFruit() {
-        // welk fruit?
-        // show de fruit
-        getTimers().get(2).reset();
-        getTimers().get(2).resume();
-    }
-
-    public void hideFruit() {
-        // hide de fruit;
-    }
-
-    // todo: door te tunnel lopen met pacman en spook (spook gaat langzamer door de tunnel)  [would have?]
+    // todo: door te tunnel lopen met spook (spook gaat langzamer door de tunnel)  [would have?]
     public void processEvent(GameEvents event) {
         switch (event) {
             case DOTGEGETEN -> {
                 punten.increase();
                 aantalDotsGegeten++;
 
-                System.out.println(aantalDotsGegeten);
                 if (aantalDotsGegeten == 170) {
-                    showFruit();
+                    fruit.setVisible(true);
+                    getTimers().get(2).reset();
+                    getTimers().get(2).resume();
                 }
-                if (aantalDotsGegeten == 10){//totaalAantalStippen) {
+                if (aantalDotsGegeten == totaalAantalStippen) {
                     pacMan.nextLevel();
                     pacManGame.increaseLevel();
                     pacManGame.setPunten(punten.getValue());
                     pacManGame.setActiveScene(3);
                 }
-                // todo: fruit tonen als genoeg gegeten
-                // todo: fruit entity maken (met collision, gaat zelf weg naar botsing)
-                // todo: alle dots gegeten? Level gewonnen, da door naar nieuw levelm waarbij pacman en spook sneller gaan. (ook ander fruit met meer punten)
             }
-            case POWERPELLETGEGEGETEN -> {
+            case POWERPELLETGEGETEN -> {
                 aantalDotsGegeten++;
                 spookStatus = SpookStatus.VLUCHTEN;
                 punten.setValue(punten.getValue() + 10);
@@ -154,7 +141,7 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
                 aantalDodeSpoken++;
                 punten.setValue(punten.getValue() + 100 * (int)Math.pow(2,aantalDodeSpoken));
 
-                // todo: spookgeluidjes (in de scene, niet spookentity) op basis van spookStatus setSpookStatus()??
+                // todo: spookgeluidjes (in de scene, niet spook entity) op basis van spookStatus setSpookStatus()??
             }
             case SPOOKINHUIS -> {
                 aantalDodeSpoken--;
@@ -162,11 +149,8 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
                     spookStatus = SpookStatus.VLUCHTEN;
                 }
             }
-            case FRUITGEPAKT -> {
-                // Krijg punten van fruit in level.
-                // todo: elke level meer punten!
-                // todo: levels bijhouden.
-                punten.setValue(punten.getValue() + 100 * (int)Math.pow(2,level));
+            case FRUITGEGETEN -> {
+                  punten.setValue(punten.getValue() + 100 * (int)Math.pow(2,level));
             }
             case PACMANGEPAKT -> {
                 leven.decrease();

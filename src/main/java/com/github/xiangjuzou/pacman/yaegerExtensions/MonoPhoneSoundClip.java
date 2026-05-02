@@ -1,7 +1,7 @@
 package com.github.xiangjuzou.pacman.yaegerExtensions;
 import com.github.hanyaeger.api.media.SoundClip;
 
-/// A soundclip that can't start twice at the same time.
+// Een soundclip die niet twee keer tegelijk kan worden afgespeeld
 public class MonoPhoneSoundClip extends SoundClip {
     private boolean playing = false;
 

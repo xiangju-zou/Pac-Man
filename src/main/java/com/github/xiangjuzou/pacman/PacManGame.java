@@ -7,7 +7,6 @@ import com.github.xiangjuzou.pacman.scenes.GameEinde;
 import com.github.xiangjuzou.pacman.scenes.GameNextLevel;
 import com.github.xiangjuzou.pacman.scenes.GameStart;
 
-
 public class PacManGame extends YaegerGame {
     public static void main(String[] args) {
         launch(args);
@@ -27,8 +26,8 @@ public class PacManGame extends YaegerGame {
     public void setupScenes() {
        addScene(0, new GameStart(this));
        addScene(1, new GameLevel(this));
-        addScene(2, new GameEinde(this));
-        addScene(3, new GameNextLevel(this));
+       addScene(2, new GameEinde(this));
+       addScene(3, new GameNextLevel(this));
     }
 
     public int getLevel() {return level;}

@@ -2,8 +2,7 @@ package com.github.xiangjuzou.pacman.entities;
 
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.Size;
-import com.github.hanyaeger.api.entities.AnimationCallback;
-import com.github.hanyaeger.api.entities.Direction;
+import com.github.hanyaeger.api.entities.*;
 import com.github.hanyaeger.api.media.SoundClip;
 import com.github.hanyaeger.api.userinput.KeyListener;
 import com.github.xiangjuzou.pacman.entities.animaties.PacManAnimatie;
@@ -17,10 +16,12 @@ import com.github.xiangjuzou.pacman.yaegerExtensions.MonoPhoneSoundClip;
 import com.github.xiangjuzou.pacman.yaegerExtensions.TravelingSpriteEntity;
 import javafx.scene.input.KeyCode;
 
+import java.util.List;
 import java.util.Set;
 
-public class PacMan extends TravelingSpriteEntity implements AnimationCallback, KeyListener {
+public class PacMan extends TravelingSpriteEntity implements AnimationCallback, KeyListener, Collided {
     private final PacManAnimatie Animaties = new PacManAnimatie(this);
+
     private final GameLevel scene;
     private final double snelheid;
     private final MonoPhoneSoundClip chomp = new MonoPhoneSoundClip("audio/pacman_chomp.wav", SoundClip.INDEFINITE);
@@ -64,25 +65,73 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
         if (!isBegonnen) {
             return;
         }
+
         var pacmanTileCoordinate = getAnchorLocation().add(new Coordinate2D(16, 16));
         var locatie = new Locatie2D(pacmanTileCoordinate);
 
-        // Eet stip
+        verwerkEten(locatie);    // Eet Dot of POWERPELLET
+        controleerMuur(locatie); // controleer muur
+        verwerkCommando(locatie);  // verwerkCommando(locatie);
+
+         // voorbeeld doodgaan
+//       if(getAnchorLocation().getY() > 344 && getSpeed() > 0) {
+//          gaDood();
+//       }
+    }
+
+    @Override
+    public void call() {
+        // Dit is de callback van de "gaDood"  animatie.
+        //todo: op startpunt opnieuw beginnen.
+    }
+
+    public void nextLevel(){
+        chomp.stop();
+    }
+
+    public void gaDood() {
+        setSpeed(0);
+        chomp.stop();
+        var geluidDood = new SoundClip("audio/pacman_death.mp3");
+        geluidDood.play();
+        playAnimation((Animaties.getAnimatie(PacManAnimatieSoort.DOOD)));
+    }
+
+    // Eet dot of powerpellet, verwerken punten, leven enz
+    private void verwerkEten(Locatie2D locatie) {
         var gegeten = bord.eetStip(locatie);
+
         if (gegeten == Gegeten.DOT) {
             chomp.play();
             scene.processEvent(GameEvents.DOTGEGETEN);
         }
-        if (gegeten == Gegeten.POWERPELLET) {
+        else if (gegeten == Gegeten.POWERPELLET) {
             chomp.play();
-            scene.processEvent(GameEvents.POWERPELLETGEGEGETEN);
+            scene.processEvent(GameEvents.POWERPELLETGEGETEN);
         }
-        if (gegeten == Gegeten.NIETS) {
+        else {
             chomp.stop();
         }
+    }
 
-        // controleer muur
+    @Override
+    public void onCollision(List<Collider> colliders) {
+        // Controleer of het fruit in de colliders zit
+        for (var collider : colliders) {
+            if ((collider instanceof Fruit fruit) && (fruit.isVisible())) {
+                // Eat fruit
+                var eatFruit = new SoundClip("audio/pacman_eatfruit.mp3");
+                eatFruit.play();
+                scene.processEvent(GameEvents.FRUITGEGETEN);
+                fruit.remove();
+            }
+        }
+    }
+
+    // Tegen een muur, stop beweging en gebruik eerste animatie-sprite
+    private void controleerMuur(Locatie2D locatie) {
         var heeftMuur = bord.heeftMuur(locatie, Direction.valueOf(getDirection()), false);
+
         if (heeftMuur) {
             switch (Direction.valueOf(getDirection())) {
                 case Direction.LEFT -> playAnimation(Animaties.getAnimatie(PacManAnimatieSoort.STILSTAANLINKS));
@@ -92,7 +141,10 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
             }
             setSpeed(0);
         }
+    }
 
+    // Een nieuwe richting ingedrukt, en mag Pac-Man daarheen bewegen
+    private void verwerkCommando(Locatie2D locatie) {
         if (LaatsteCommando != null) {
             switch (LaatsteCommando) {
                 case UP -> {
@@ -129,28 +181,5 @@ public class PacMan extends TravelingSpriteEntity implements AnimationCallback, 
                 }
             }
         }
-
-        // voorbeeld doodgaan
-//        if(getAnchorLocation().getY() > 344 && getSpeed() > 0) {
-//            gaDood();
-//        }
-    }
-
-    @Override
-    public void call() {
-        // Dit is de callback van de "gaDood"  animatie.
-        //todo: op startpunt opnieuw beginnen.
-    }
-
-    public void nextLevel(){
-        chomp.stop();
-    }
-
-    public void gaDood() {
-        setSpeed(0);
-        chomp.stop();
-        var geluidDood = new SoundClip("audio/pacman_death.mp3");
-        geluidDood.play();
-        playAnimation((Animaties.getAnimatie(PacManAnimatieSoort.DOOD)));
     }
 }

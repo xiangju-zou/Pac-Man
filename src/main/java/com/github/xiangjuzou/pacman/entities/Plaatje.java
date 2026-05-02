@@ -4,6 +4,7 @@ import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.Size;
 import com.github.hanyaeger.api.entities.impl.SpriteEntity;
 
+// Toon een afbeelding van het logo
 public class Plaatje extends SpriteEntity {
 
     public Plaatje(String resource, Coordinate2D initialLocation) {

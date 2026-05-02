@@ -16,7 +16,6 @@ public class GameNextLevel extends DynamicScene implements TimerContainer, Timer
         this.pacManGame = pacManGame;
     }
 
-
     @Override
     public void setupTimers() {
         var timer = new SingleTimer(0, 3000, this);

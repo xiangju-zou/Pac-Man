@@ -84,6 +84,5 @@ public abstract class TravelingSpriteEntity extends DynamicSpriteEntity implemen
             var spawnLeft = new Locatie2D(27,14);
             setAnchorLocation(spawnLeft.GetCoordinate().add(characterOffset));
         }
-
     }
 }

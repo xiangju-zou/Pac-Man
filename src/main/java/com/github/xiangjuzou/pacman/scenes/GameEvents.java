@@ -2,9 +2,9 @@ package com.github.xiangjuzou.pacman.scenes;
 
 public enum GameEvents {
     DOTGEGETEN,
-    POWERPELLETGEGEGETEN,
+    POWERPELLETGEGETEN,
     SPOOKGEPAKT,
     PACMANGEPAKT,
-    FRUITGEPAKT,
+    FRUITGEGETEN,
     SPOOKINHUIS,
 }

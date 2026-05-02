@@ -10,7 +10,7 @@ public class PacManAnimatie {
     public PacManAnimatie(AnimationCallback callback) {
         Animations = Map.of(
                 // Sprite wisselen van het plaatje binnen cycleTime
-                PacManAnimatieSoort.DOOD, new FiniteAnimationWithCallBack(0, 0, 0, 13, 250, callback),
+                PacManAnimatieSoort.DOOD, new FiniteAnimationWithCallBack(0, 0, 0, 13, 250, callback), // Callback gaat over het afgelopen van animatie
                 PacManAnimatieSoort.STILSTAANRECHTS, new LoopingAnimation(1, 0,1,0, 75),
                 PacManAnimatieSoort.STILSTAANLINKS, new LoopingAnimation(1, 2,1,2, 75),
                 PacManAnimatieSoort.STILSTAANBOVEN, new LoopingAnimation(1, 4,1,4, 75),

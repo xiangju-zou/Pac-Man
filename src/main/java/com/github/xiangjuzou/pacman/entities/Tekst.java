@@ -6,6 +6,7 @@ import com.github.hanyaeger.api.entities.impl.CustomFont;
 import com.github.hanyaeger.api.entities.impl.TextEntity;
 import javafx.scene.paint.Color;
 
+// Laat de tekst zien, bijvoorbeeld: levens, punten
 public class Tekst extends TextEntity {
     public Tekst(Coordinate2D initialLocation, String text) {
         super(initialLocation, text);

@@ -10,6 +10,7 @@ public class Bord extends TileMap {
     private static final int SPOOKDEUR = 3;
 
     //  28 breed, 31 hoog
+    //  ID 36 stelt de tilemap voor. ID 37 is de PowerPellet-tegel. ID 38 blijft leeg, omdat de PowerPellet-tegel een knipperende animatie heeft. ID 39 is de dot
     private final int[][] map = new int[][] {
             { 4,13,13,13,13,13,13,13,13,13,13,13,13, 1, 2,13,13,13,13,13,13,13,13,13,13,13,13, 5},
             {16,39,39,39,39,39,39,39,39,39,39,39,39,33,32,39,39,39,39,39,39,39,39,39,39,39,39,17},
@@ -65,6 +66,7 @@ public class Bord extends TileMap {
         return true;
     }
 
+    // Gegeten is enum, return waarden van enum
     public Gegeten eetStip(Locatie2D locatie) {
         var y = locatie.getY();
         var x = locatie.getX();
@@ -74,6 +76,7 @@ public class Bord extends TileMap {
 
             return Gegeten.DOT;
         }
+
         if (getInstanceMap()[y][x] instanceof PowerPelletTegel) {
             getInstanceMap()[y][x].remove();
 
@@ -91,7 +94,7 @@ public class Bord extends TileMap {
             return false;
         }
 
-        // Spook mag door deur
+        // Spook mag door de deur
         if (tileId == SPOOKDEUR && isSpook) {
             return false;
         }
@@ -102,7 +105,7 @@ public class Bord extends TileMap {
     @Override
     public void setupEntities() {
         for (int i = 1; i < 36; i++) {
-            addEntity(i, BordTegel.class, new TegelConfig(i));
+            addEntity(i, BordTegel.class, new TegelConfig(i)); // In de map zijn er ID’s van 0 tot 39, en elke ID verwijst naar een entity.
         }
 
         addEntity(37, PowerPelletTegel.class);

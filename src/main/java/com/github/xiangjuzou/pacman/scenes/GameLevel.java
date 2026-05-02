@@ -1,12 +1,10 @@
 package com.github.xiangjuzou.pacman.scenes;
-
+import com.github.xiangjuzou.pacman.entities.*;
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.TimerContainer;
 import com.github.hanyaeger.api.scenes.DynamicScene;
 import com.github.hanyaeger.api.scenes.TileMapContainer;
 import com.github.xiangjuzou.pacman.PacManGame;
-import com.github.xiangjuzou.pacman.entities.PacMan;
-import com.github.xiangjuzou.pacman.entities.ValueEntity;
 import com.github.xiangjuzou.pacman.entities.maps.Bord;
 import com.github.xiangjuzou.pacman.timers.SingleTimer;
 import com.github.xiangjuzou.pacman.timers.TimerCallback;
@@ -27,6 +25,7 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
     private int aantalDotsGegeten;
     private SpookStatus spookStatus;
     private int aantalDodeSpoken;
+    private Spook [] spoken = new Spook[4];
 
     public GameLevel(PacManGame pacManGame) {
         this.pacManGame = pacManGame;
@@ -50,9 +49,16 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
         hogePunten = new ValueEntity(new Coordinate2D(925, getHeight() - 700), "Hoogste", 0);
 
         addEntity(pacMan);
+        spoken[0] = new Blinky(new Coordinate2D(12*32+16, 11*32+16));
+                spoken[1] = new Pinky (new Coordinate2D(13*32+16, 11*32+16));
+                        spoken[2] = new Inky (new Coordinate2D(14*32+16, 11*32+16));
+                                spoken [3] = new Clyde (new Coordinate2D(15*32+16, 11*32+16));
         addEntity(leven);
         addEntity(punten);
         addEntity(hogePunten);
+        for (Spook s : spoken) {
+            addEntity(s);
+        }
     }
 
     // TileMap registreren
@@ -86,11 +92,16 @@ public class GameLevel extends DynamicScene implements TileMapContainer, TimerCo
     public void onTimeReached(int id) {
         if (id == 0 ) {
             pacMan.start();
+            var bord = (Bord) getTileMaps().get(0);
+            for (Spook s : spoken) {
+                s.start(bord);
+            }
         }
 
         if (id == 1) {
             pacManGame.setActiveScene(2);
         }
+
     }
 
     public void gameOver(){
